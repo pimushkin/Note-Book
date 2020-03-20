@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Notebook
 {
-    public class FieldHandler
+    public static class FieldHandler
     {
         public enum Field
         {
@@ -123,6 +123,7 @@ namespace Notebook
                     }
 
                     break;
+                // TODO: Add processing for the date of birth, organization, and position fields.
             }
 
             return field;
