@@ -8,7 +8,7 @@ namespace Notebook
         {
             while (true)
             {
-                Console.WriteLine("МЕНЮ:\n" +
+                Console.WriteLine("ГЛАВНОЕ МЕНЮ:\n" +
                                   "1. Создать новый контакт;\n" +
                                   "2. Редактировать созданный контакт;\n" +
                                   "3. Удалить созданный контакт;\n" +
@@ -17,12 +17,14 @@ namespace Notebook
                                   "6. Завершить работую.");
                 while (true)
                 {
-                    Console.WriteLine("Выберите действие(номер одного из пукнтов выше): ");
+                    Console.Write("Выберите действие(номер одного из пукнтов выше): ");
                     var isCorrectInput = int.TryParse(Console.ReadLine(), out var choose);
                     if (!isCorrectInput)
                     {
                         Console.WriteLine("Ошибка! Некорректный ввод.");
-                        continue;
+                        Console.Write("Для продолжения нажмите любую клавишу . . .");
+                        Console.ReadKey();
+                        break;
                     }
 
                     switch (choose)
@@ -44,6 +46,11 @@ namespace Notebook
                             break;
                         case 6:
                             return;
+                        default:
+                            Console.WriteLine("Ошибка! Некорректный ввод.");
+                            Console.Write("Для продолжения нажмите любую клавишу . . .");
+                            Console.ReadKey();
+                            break;
                     }
 
                     break;

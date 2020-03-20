@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 
 namespace Notebook
 {
@@ -9,6 +10,7 @@ namespace Notebook
 
         public static void CreateNewContact()
         {
+            Console.Clear();
             Console.WriteLine("Введите данные (обязательные поля помечены *):");
 
             Console.WriteLine("Фамилия*:");
@@ -40,52 +42,70 @@ namespace Notebook
 
             Notebook.Add(new Person(surname, name, patronymic, phoneNumber, country, dateOfBirth, organization,
                 position, otherNotes));
-            Console.ReadLine();
+            
+            Console.Write("Для продолжения нажмите любую клавишу . . .");
+            Console.ReadKey();
         }
 
         public static void EditContact()
         {
+            Console.Clear();
             if (Notebook.Count == 0)
             {
                 Console.WriteLine("Записная книжка пуста!");
-                Console.ReadLine();
+                Console.Write("Для продолжения нажмите любую клавишу . . .");
+                Console.ReadKey();
                 return;
             }
 
-            var index = 1;
-            foreach (var person in Notebook)
-            {
-                Console.WriteLine($"{index++}. {person.Surname} {person.Name}");
-            }
-
-            Console.WriteLine("Информацию о каком пользователе Вы желаете изменить?");
-
             while (true)
             {
-                Console.Write("Укажите порядковый номер контакта: ");
-                var isCorrectInput = int.TryParse(Console.ReadLine(), out int firstChoose);
-                if (!isCorrectInput || firstChoose < 1 || firstChoose > Notebook.Count)
+                Console.WriteLine("Список всех контактов:");
+                var index = 1;
+                foreach (var person in Notebook)
                 {
-                    Console.WriteLine("Ошибка!");
-                    continue;
+                    Console.WriteLine($"{index++}. {person.Surname} {person.Name}");
                 }
 
-                Console.WriteLine(Notebook[firstChoose - 1]);
+                Console.WriteLine("Информацию о каком пользователе Вы желаете изменить? (введите -1, чтобы вернуться в главное меню)");
+                Console.Write("Укажите порядковый номер контакта: ");
+                var isCorrectInput = int.TryParse(Console.ReadLine(), out int firstChoose);
+                if (firstChoose == -1)
+                {
+                    return;
+                }
+                if (!isCorrectInput || firstChoose < 1 || firstChoose > Notebook.Count)
+                {
+                    Console.WriteLine("Ошибка! Некорректный ввод.");
+                    
+                    Console.Write("Для продолжения нажмите любую клавишу . . .");
+                    Console.ReadKey();
+                    Console.Clear();
+                    continue;
+                }
+                
                 while (true)
                 {
+                    Console.Clear();
+                    Console.WriteLine(Notebook[firstChoose - 1]);
                     Console.Write(
-                        "Укажите порядковый номер поля, который желаете изменить(введите 0, чтобы завершить редактирование): ");
+                        "Укажите порядковый номер поля, который желаете изменить (введите -1, чтобы вернуться в главное меню): ");
                     isCorrectInput = int.TryParse(Console.ReadLine(), out int secondChoose);
-                    if (!isCorrectInput || secondChoose < 0 || secondChoose > 9)
+                    if (secondChoose == -1)
                     {
-                        Console.WriteLine("Ошибка!");
+                        return;
+                    }
+                    if (!isCorrectInput || secondChoose < 1 || secondChoose > 9)
+                    {
+                        Console.WriteLine("Ошибка! Некорректный ввод.");
+                        
+                        Console.Write("Для продолжения нажмите любую клавишу . . .");
+                        Console.ReadKey();
                         continue;
                     }
 
                     switch (secondChoose)
                     {
-                        case 0:
-                            return;
                         case 1:
                             Console.WriteLine("Фамилия*:");
                             var surname = FieldHandler.RequestData(FieldHandler.Field.NameOrSurname);
@@ -128,36 +148,50 @@ namespace Notebook
                             Notebook[firstChoose - 1].OtherNotes = Console.ReadLine();
                             break;
                     }
+
+                    Console.WriteLine("Поле успешно изменено.\n");
+                    
+                    Console.Write("Для продолжения нажмите любую клавишу . . .");
+                    Console.ReadKey();
                 }
             }
         }
 
         public static void DeleteContact()
         {
+            Console.Clear();
             if (Notebook.Count == 0)
             {
                 Console.WriteLine("Записная книжка пуста!");
-                Console.ReadLine();
+                Console.Write("Для продолжения нажмите любую клавишу . . .");
+                Console.ReadKey();
                 return;
             }
-
-            var index = 1;
-            foreach (var person in Notebook)
-            {
-                Console.WriteLine($"{index++}. {person.Surname} {person.Name}");
-            }
-
-            Console.WriteLine("Какой контакт желаете удалить?");
 
             bool isCorrectInput = false;
             while (!isCorrectInput)
             {
-                Console.Write("Укажите порядковый номер контакта: ");
+                Console.WriteLine("Список всех контактов:");
+                var index = 1;
+                foreach (var person in Notebook)
+                {
+                    Console.WriteLine($"{index++}. {person.Surname} {person.Name}");
+                }
+
+                Console.WriteLine("Какой контакт желаете удалить?");
+                Console.Write("Укажите порядковый номер контакта (введите -1, чтобы вернуться в главное меню): ");
                 isCorrectInput = int.TryParse(Console.ReadLine(), out int choose);
+                if (choose == -1)
+                {
+                    return;
+                }
                 if (!isCorrectInput || choose < 1 || choose > Notebook.Count)
                 {
-                    Console.WriteLine("Ошибка!");
+                    Console.WriteLine("Ошибка! Некорректный ввод.");
                     isCorrectInput = false;
+                    Console.Write("Для продолжения нажмите любую клавишу . . .");
+                    Console.ReadKey();
+                    Console.Clear();
                     continue;
                 }
 
@@ -165,60 +199,78 @@ namespace Notebook
                 Console.WriteLine("Контакт удален.");
             }
 
-            Console.ReadLine();
+            Console.Write("Для продолжения нажмите любую клавишу . . .");
+            Console.ReadKey();
         }
 
         public static void ViewContactInfo()
         {
+            Console.Clear();
             if (Notebook.Count == 0)
             {
                 Console.WriteLine("Записная книжка пуста!");
-                Console.ReadLine();
+                Console.Write("Для продолжения нажмите любую клавишу . . .");
+                Console.ReadKey();
                 return;
             }
-
-            var index = 1;
-            foreach (var person in Notebook)
-            {
-                Console.WriteLine($"{index++}. {person.Surname} {person.Name}");
-            }
-
-            Console.WriteLine("Полную информацию о каком контакте Вам показать?");
 
             bool isCorrectInput = false;
             while (!isCorrectInput)
             {
+                Console.WriteLine("Список всех контактов:");
+                var index = 1;
+                foreach (var person in Notebook)
+                {
+                    Console.WriteLine($"{index++}. {person.Surname} {person.Name}");
+                }
+
+                Console.WriteLine("Полную информацию о каком контакте Вам показать? (введите -1, чтобы вернуться в главное меню)");
                 Console.Write("Укажите порядковый номер контакта: ");
                 isCorrectInput = int.TryParse(Console.ReadLine(), out int choose);
+                if (choose == -1)
+                {
+                    return;
+                }
                 if (!isCorrectInput || choose < 1 || choose > Notebook.Count)
                 {
-                    Console.WriteLine("Ошибка!");
+                    Console.WriteLine("Ошибка! Некорректный ввод.");
                     isCorrectInput = false;
+                    Console.Write("Для продолжения нажмите любую клавишу . . .");
+                    Console.ReadKey();
+                    Console.Clear();
                     continue;
                 }
 
+                Console.Clear();
                 Console.WriteLine(Notebook[choose - 1]);
+                isCorrectInput = false;
+                Console.Write("Для продолжения нажмите любую клавишу . . .");
+                Console.ReadKey();
+                Console.Clear();
             }
-
-            Console.ReadLine();
         }
 
         public static void ViewAllList()
         {
+            Console.Clear();
             if (Notebook.Count == 0)
             {
                 Console.WriteLine("Записная книжка пуста!");
-                Console.ReadLine();
+                Console.Write("Для продолжения нажмите любую клавишу . . .");
+                Console.ReadKey();
                 return;
             }
 
+            Console.WriteLine("Список всех контактов:");
             foreach (var person in Notebook)
             {
-                Console.WriteLine(person);
-                Console.WriteLine();
+                Console.WriteLine($"1. Фамилия: {person.Surname}\n" +
+                                  $"2. Имя: {person.Name}\n" +
+                                  $"3. Номер телефона: {person.PhoneNumber}\n");
             }
 
-            Console.ReadLine();
+            Console.Write("Для продолжения нажмите любую клавишу . . .");
+            Console.ReadKey();
         }
     }
 }
