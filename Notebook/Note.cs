@@ -167,7 +167,7 @@ namespace Notebook
                 return;
             }
 
-            bool isCorrectInput = false;
+            var isCorrectInput = false;
             while (!isCorrectInput)
             {
                 Console.WriteLine("Список всех контактов:");
@@ -213,8 +213,7 @@ namespace Notebook
                 return;
             }
 
-            bool isCorrectInput = false;
-            while (!isCorrectInput)
+            while (true)
             {
                 Console.WriteLine("Список всех контактов:");
                 var index = 1;
@@ -225,7 +224,7 @@ namespace Notebook
 
                 Console.WriteLine("Полную информацию о каком контакте Вам показать? (введите -1, чтобы вернуться в главное меню)");
                 Console.Write("Укажите порядковый номер контакта: ");
-                isCorrectInput = int.TryParse(Console.ReadLine(), out int choose);
+                var isCorrectInput = int.TryParse(Console.ReadLine(), out int choose);
                 if (choose == -1)
                 {
                     return;
@@ -233,7 +232,6 @@ namespace Notebook
                 if (!isCorrectInput || choose < 1 || choose > Notebook.Count)
                 {
                     Console.WriteLine("Ошибка! Некорректный ввод.");
-                    isCorrectInput = false;
                     Console.Write("Для продолжения нажмите любую клавишу . . .");
                     Console.ReadKey();
                     Console.Clear();
@@ -242,7 +240,6 @@ namespace Notebook
 
                 Console.Clear();
                 Console.WriteLine(Notebook[choose - 1]);
-                isCorrectInput = false;
                 Console.Write("Для продолжения нажмите любую клавишу . . .");
                 Console.ReadKey();
                 Console.Clear();

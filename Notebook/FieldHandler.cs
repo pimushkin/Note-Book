@@ -18,7 +18,7 @@ namespace Notebook
 
         public static dynamic RequestData(Field option)
         {
-            var field = "";
+            string field;
             switch (option)
             {
                 case Field.NameOrSurname:
@@ -27,7 +27,7 @@ namespace Notebook
                     while (true)
                     {
                         field = Console.ReadLine();
-                        var isInvalidCharacter = field.Any(symbol =>
+                        var isInvalidCharacter = (field ?? throw new InvalidOperationException()).Any(symbol =>
                             (symbol < 'А' || symbol > 'Я') && (symbol < 'а' || symbol > 'я'));
 
                         switch (option)
@@ -50,6 +50,8 @@ namespace Notebook
                                 }
 
                                 break;
+                            default:
+                                throw new ArgumentOutOfRangeException(nameof(option), option, null);
                         }
 
                         if (field != "")
@@ -67,7 +69,9 @@ namespace Notebook
                     while (true)
                     {
                         field = Console.ReadLine();
-                        var isInvalidNumber = field.Any(symbol => symbol < '0' || symbol > '9');
+                        var isInvalidNumber =
+                            (field ?? throw new InvalidOperationException()).Any(symbol =>
+                                symbol < '0' || symbol > '9');
                         if (field == "" || isInvalidNumber)
                         {
                             Console.WriteLine(
@@ -98,49 +102,51 @@ namespace Notebook
 
                         var isInvalidField = false;
                         var isEmptyWord = false;
-                        var strField = field.Split(' ');
-                        foreach (var word in strField)
+                        if (field != null)
                         {
-                            isInvalidField = word.Any(symbol =>
-                                (symbol < 'А' || symbol > 'Я') && (symbol < 'а' || symbol > 'я'));
-                            if (word == "")
+                            var strField = field.Split(' ');
+                            foreach (var word in strField)
                             {
-                                isEmptyWord = true;
+                                isInvalidField = word.Any(symbol =>
+                                    (symbol < 'А' || symbol > 'Я') && (symbol < 'а' || symbol > 'я'));
+                                if (word == "")
+                                {
+                                    isEmptyWord = true;
+                                }
+
+                                if (!isInvalidField && !isEmptyWord) continue;
+                                Console.WriteLine(
+                                    "Ошибка! Некорректный ввод (поле может содержать только буквы русского алфавита).");
+                                break;
                             }
 
-                            if (!isInvalidField && !isEmptyWord) continue;
-                            Console.WriteLine(
-                                "Ошибка! Некорректный ввод (поле может содержать только буквы русского алфавита).");
-                            break;
-                        }
+                            if (isInvalidField || isEmptyWord)
+                            {
+                                continue;
+                            }
 
-                        if (isInvalidField || isEmptyWord)
-                        {
-                            continue;
-                        }
+                            field = "";
+                            switch (option)
+                            {
+                                case Field.Country:
+                                case Field.Organisation:
+                                    for (int i = 0; i < strField.Length; i++)
+                                    {
+                                        strField[i] = strField[i][0].ToString().ToUpper() +
+                                                      strField[i].Substring(1, strField[i].Length - 1).ToLower();
+                                        field += strField[i] + " ";
+                                    }
 
-                        field = "";
-                        switch (option)
-                        {
-                            case Field.Country:
-                            case Field.Organisation:
-                                for (int i = 0; i < strField.Length; i++)
-                                {
-                                    strField[i] = strField[i][0].ToString().ToUpper() +
-                                                  strField[i].Substring(1, strField[i].Length - 1).ToLower();
-                                    field += strField[i] + " ";
-                                }
+                                    field = field.Remove(field.Length - 1);
+                                    break;
+                                case Field.Position:
+                                    field = strField.Aggregate(field, (current, word) => current + (word + " "));
 
-                                field = field.Remove(field.Length - 1);
-                                break;
-                            case Field.Position:
-                                foreach (var word in strField)
-                                {
-                                    field += word + " ";
-                                }
-
-                                field = field.Remove(field.Length - 1);
-                                break;
+                                    field = field.Remove(field.Length - 1);
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException(nameof(option), option, null);
+                            }
                         }
 
                         break;
@@ -210,6 +216,8 @@ namespace Notebook
                         var dateOfBirth = new DateTime(year, month, date);
                         return dateOfBirth;
                     }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(option), option, null);
             }
 
             return field;
