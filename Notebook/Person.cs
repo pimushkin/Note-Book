@@ -1,19 +1,45 @@
-﻿namespace Notebook
+﻿using System;
+
+namespace Notebook
 {
     public class Person
     {
         public string Surname;
         public string Name;
-        public string Patronymic;
-        public string PhoneNumber;
-        public string Country;
-        public string DateOfBirth;
-        public string Organization;
-        public string Position;
-        public string OtherNotes;
+        private string _patronymic;
 
-        public Person(string surname, string name, string patronymic, string phoneNumber, string country,
-            string dateOfBirth, string organization, string position, string otherNotes)
+        public string Patronymic
+        {
+            get => _patronymic;
+            set => _patronymic = value == "" ? "отсутствует" : value;
+        }
+        public long PhoneNumber;
+        public string Country;
+        public DateTime DateOfBirth;
+        private string _organisation;
+
+        public string Organization
+        {
+            get => _organisation;
+            set => _organisation = value == "" ? "отсутствует" : value;
+        }
+        private string _position;
+
+        public string Position
+        {
+            get => _position;
+            set => _position = value == "" ? "отсутствует" : value;
+        }
+        private string _otherNotes;
+
+        public string OtherNotes
+        {
+            get => _otherNotes;
+            set => _otherNotes = value == "" ? "отсутствуют" : value;
+        }
+
+        public Person(string surname, string name, string patronymic, long phoneNumber, string country,
+            DateTime dateOfBirth, string organization, string position, string otherNotes)
         {
             Surname = surname;
             Name = name;
@@ -28,15 +54,27 @@
 
         public override string ToString()
         {
+            if (DateOfBirth == DateTime.MinValue)
+            {
+                return $"1. Фамилия: {Surname}\n" +
+                       $"2. Имя: {Name}\n" +
+                       $"3. Отчество: {Patronymic}\n" +
+                       $"4. Номер телефона: {PhoneNumber}\n" +
+                       $"5. Страна: {Country}\n" +
+                       "6. Дата рождения: отсутствует\n" +
+                       $"7. Организация: {Organization}\n" +
+                       $"8. Должность: {Position}\n" +
+                       $"9. Прочие заметки: {OtherNotes}";
+            }
             return $"1. Фамилия: {Surname}\n" +
                    $"2. Имя: {Name}\n" +
                    $"3. Отчество: {Patronymic}\n" +
                    $"4. Номер телефона: {PhoneNumber}\n" +
                    $"5. Страна: {Country}\n" +
-                   $"6. Дата рождения: {DateOfBirth}\n" +
+                   $"6. Дата рождения: {DateOfBirth:D}\n" +
                    $"7. Организация: {Organization}\n" +
                    $"8. Должность: {Position}\n" +
-                   $"9. Прочите заметки: {OtherNotes}";
+                   $"9. Прочие заметки: {OtherNotes}";
         }
     }
 }

@@ -28,13 +28,13 @@ namespace Notebook
             var country = FieldHandler.RequestData(FieldHandler.Field.Country);
 
             Console.WriteLine("Дата рождения:");
-            var dateOfBirth = Console.ReadLine();
+            var dateOfBirth = FieldHandler.RequestData(FieldHandler.Field.DateOfBirth);
 
             Console.WriteLine("Организация:");
-            var organization = Console.ReadLine();
+            var organization = FieldHandler.RequestData(FieldHandler.Field.Organisation);
 
             Console.WriteLine("Должность:");
-            var position = Console.ReadLine();
+            var position = FieldHandler.RequestData(FieldHandler.Field.Position);
 
             Console.WriteLine("Прочие заметки:");
             var otherNotes = Console.ReadLine();
@@ -132,15 +132,15 @@ namespace Notebook
                             break;
                         case 6:
                             Console.WriteLine("Дата рождения:");
-                            Notebook[firstChoose - 1].DateOfBirth = Console.ReadLine();
+                            Notebook[firstChoose - 1].DateOfBirth = FieldHandler.RequestData(FieldHandler.Field.DateOfBirth);
                             break;
                         case 7:
                             Console.WriteLine("Организация:");
-                            Notebook[firstChoose - 1].Organization = Console.ReadLine();
+                            Notebook[firstChoose - 1].Organization = FieldHandler.RequestData(FieldHandler.Field.Organisation);
                             break;
                         case 8:
                             Console.WriteLine("Должность:");
-                            Notebook[firstChoose - 1].Position = Console.ReadLine();
+                            Notebook[firstChoose - 1].Position = FieldHandler.RequestData(FieldHandler.Field.Position);
                             break;
                         case 9:
                             Console.WriteLine("Прочие заметки:");
